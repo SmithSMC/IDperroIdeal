@@ -6,140 +6,117 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.boxlayout import BoxLayout
+from kivy.lang import Builder
+
+Builder.load_string('''
+<MainLayout>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            source: 'fondo4.png'
+
+    Label:
+        text: "¡Bienvenido de nuevo!"
+        color: 168/255, 110/255, 69/255, 1
+        size_hint: None, None
+        size: 330, 60
+        pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+        font_size: '30sp'
+        font_name: 'Inter.ttc'
+        halign: 'center'
+        valign: 'middle'
+
+    CasillaTexto:
+        id: email_input
+        hint_text: "Correo"
+        multiline: False
+        background_color: 241/255, 194/255, 163/255, 1
+        foreground_color: 0, 0, 0, 1
+        border: 0, 0, 0, 0
+        background_active: ''
+        size_hint: None, None
+        size: 330, 40
+        pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+        font_name: 'Inter.ttc'
+
+    CasillaTexto:
+        id: password_input
+        hint_text: "Contraseña"
+        multiline: False
+        password: True
+        background_color: 241/255, 194/255, 163/255, 1
+        foreground_color: 0, 0, 0, 1
+        border: 0, 0, 0, 0
+        background_active: ''
+        size_hint: None, None
+        size: 330, 40
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        font_name: 'Inter.ttc'
+
+    Button:
+        text: "Iniciar sesión"
+        background_color: 168/255, 110/255, 69/255, 1
+        color: 1, 1, 1, 1
+        background_down: '#A86E45'
+        size_hint: None, None
+        size: 330, 40
+        pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+        font_name: 'Inter.ttc'
+        on_press: root.verificar_contraseña()
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: None, None
+        size: 330, 40
+        pos_hint: {'center_x': 0.55, 'center_y': 0.3}
+
+        Label:
+            text: "¿Eres nuevo? "
+            color: 0, 0, 0, 1
+            size_hint: None, None
+            height: 40
+            font_name: 'Inter.ttc'
+
+        Button:
+            text: "Regístrate aquí"
+            background_normal: ''
+            background_color: 1, 1, 1, 0
+            color: 168/255, 110/255, 69/255, 1
+            size_hint: None, None
+            height: 40
+            pos_hint: {'center_x': 0.55, 'center_y': 0.5}
+            font_name: 'Inter.ttc'
+            background_down: ''
+            bold: True
+            on_press: root.ir_a_registro()
+''')
 
 class CasillaTexto(TextInput):
     pass
 
-class EnlaceLabel(Label):
-    pass
+class MainLayout(RelativeLayout):
+    def verificar_contraseña(self):
+        correo = self.ids.email_input.text
+        contraseña = self.ids.password_input.text
 
-class EnlaceIniciaSesionLabel(Label):
-    pass
+        if contraseña == "contraseña_correcta":
+            print("Contraseña correcta. Iniciando sesión...")
+            # Lógica para iniciar sesión
+        else:
+            # Mostrar mensaje de error
+            print("Contraseña incorrecta. Intentelo de nuevo")
+
+    def ir_a_registro(self):
+        print("Ir a la pantalla de registro")
 
 class MainApp(App):
     def build(self):
-        self.layout = RelativeLayout()
-
         Window.clearcolor = (1, 1, 1, 1)
         Window.size = (369, 640)
-
-        background = Image(source='fondo4.png')
-        self.layout.add_widget(background)
-
-        welcome_label = Label(
-            text="¡Bienvenido de nuevo!",
-            color=(168/255, 110/255, 69/255, 1),
-            size_hint=(None, None),
-            size=(330, 60),
-            pos_hint={'center_x': 0.5, 'center_y': 0.8},
-            font_size='30sp',
-            font_name='Inter.ttc',
-            halign='center',
-            valign='middle'
-        )
-        self.layout.add_widget(welcome_label)
-
-        email_input = CasillaTexto(
-            hint_text="Correo",
-            multiline=False,
-            background_color=(241/255, 194/255, 163/255, 1),
-            foreground_color=(0, 0, 0, 1),
-            border=(0, 0, 0, 0),
-            background_active='',  # Eliminar sombreado al hacer clic
-            size_hint=(None, None),
-            size=(330, 40),
-            pos_hint={'center_x': 0.5, 'center_y': 0.6},
-            font_name='Inter.ttc'
-        )
-        password_input = CasillaTexto(
-            hint_text="Contraseña",
-            multiline=False,
-            password=True,
-            background_color=(241/255, 194/255, 163/255, 1),
-            foreground_color=(0, 0, 0, 1),
-            border=(0, 0, 0, 0),
-            background_active='',  # Eliminar sombreado al hacer clic
-            size_hint=(None, None),
-            size=(330, 40),
-            pos_hint={'center_x': 0.5, 'center_y': 0.5},
-            font_name='Inter.ttc'
-        )
-        self.layout.add_widget(email_input)
-        self.layout.add_widget(password_input)
-
-        login_button = Button(
-            text="Iniciar sesión",
-            background_color=(168/255, 110/255, 69/255, 1),
-            color=(1, 1, 1, 1),
-            background_down='#A86E45',
-            size_hint=(None, None),
-            size=(330, 40),
-            pos_hint={'center_x': 0.5, 'center_y': 0.4},
-            font_name='Inter.ttc'
-        )
-        login_button.bind(on_press=self.verificar_contraseña)
-        self.layout.add_widget(login_button)
-
-        register_layout = BoxLayout(
-            orientation='horizontal',
-            size_hint=(None, None),
-            size=(330, 40),
-            pos_hint={'center_x': 0.55, 'center_y': 0.3}
-        )
-
-        register_label = Label(
-            text="¿Eres nuevo? ",
-            color=(0, 0, 0, 1),
-            size_hint=(None, None),
-            height=40,
-            font_name='Inter.ttc'
-        )
-        register_layout.add_widget(register_label)
-
-        register_button = Button(
-            text="Regístrate aquí",
-            background_normal='',
-            background_color=(1, 1, 1, 0),
-            color=(168/255, 110/255, 69/255, 1),
-            size_hint=(None, None),
-            height=40,
-            pos_hint={'center_x': 0.55, 'center_y': 0.5},
-            font_name='Inter.ttc',
-            background_down='',
-            bold=True
-        )
-        register_button.bind(on_press=self.ir_a_registro)
-        register_layout.add_widget(register_button)
-
-        self.layout.add_widget(register_layout)
-
-        return self.layout
-
-    def verificar_contraseña(self, instance):
-        correo = self.layout.children[2].text  # Acceder al TextInput del correo
-        contraseña = self.layout.children[3].text  # Acceder al TextInput de la contraseña
-
-        # Lógica de verificación de la contraseña
-        if contraseña == "contraseña_correcta":
-            print("Contraseña correcta. Iniciando sesión...")
-            # Aquí puedes agregar la lógica para iniciar sesión
-        else:
-            # Si la contraseña es incorrecta, mostrar un mensaje de error en color rojo
-            error_label = Label(
-                text="Contraseña incorrecta. Intentelo de nuevo",
-                color=(1, 0, 0, 1),  # Rojo
-                size_hint=(None, None),
-                size=(330, 30),
-                pos_hint={'center_x': 0.5, 'center_y': 0.3},
-                font_name='Inter.ttc'
-            )
-            self.layout.add_widget(error_label)
-
-    def ir_a_registro(self, instance):
-        print("Ir a la pantalla de registro")
-
-    def ir_a_inicio(self, instance):
-        print("Ir a la pantalla de inicio")
+        return MainLayout()
 
 if __name__ == '__main__':
     MainApp().run()
